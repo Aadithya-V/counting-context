@@ -1,0 +1,12 @@
+.venv/
+.git/
+data/
+__pycache__/
+*.pyc
+*.pyo
+.claude/
+.idea/
+.vscode/
+*.md
+!README.md
+.DS_Store

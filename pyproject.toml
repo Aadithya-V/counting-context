@@ -1,0 +1,24 @@
+[project]
+name = "election-dashboard"
+version = "0.1.0"
+description = "Scrape ECI statewise results into SQLite and serve party-wise lead/trail buckets."
+requires-python = ">=3.11"
+dependencies = [
+    "curl-cffi>=0.7",
+    "beautifulsoup4>=4.12",
+    "lxml>=5.0",
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.27",
+    "mcp[cli]>=1.2",
+]
+
+[project.scripts]
+election-dashboard = "backend.cli:main"
+counting-context-mcp = "backend.mcp_server:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["backend"]

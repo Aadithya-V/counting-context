@@ -1,0 +1,17 @@
+# Python virtualenv
+.venv/
+
+# Bytecode / build
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Note: data/ is intentionally NOT ignored — results.db is committed.

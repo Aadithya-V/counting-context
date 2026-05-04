@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Counting Context</title>
+  <meta name="description" content="A live broadsheet of election results, party-wise margin pyramid, and knife-edge contests." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..900,0..100&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,400..600&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap"
+  />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <a class="skip" href="#main">Skip to dispatch</a>
+
+  <header class="masthead" role="banner">
+    <div class="rule rule--thick"></div>
+    <div class="masthead__top">
+      <span class="edition">Vol. I &middot; No. <span id="editionNo">01</span></span>
+      <span class="masthead__motto">Counting · Returning · Reporting</span>
+      <span class="edition edition--right">
+        <time id="todayDate">—</time>
+        &middot;
+        <span id="todayTime">—</span> IST
+      </span>
+    </div>
+    <div class="rule rule--hair"></div>
+    <div class="masthead__title-row">
+      <span class="masthead__ornament" aria-hidden="true">❦</span>
+      <h1 class="masthead__title">The Counting Context</h1>
+      <span class="masthead__ornament" aria-hidden="true">❦</span>
+    </div>
+    <div class="rule rule--hair"></div>
+    <div class="masthead__byline">
+      <span class="byline__bureau">Counting Bureau · Established this evening</span>
+      <span class="byline__source">Wire: results.eci.gov.in</span>
+    </div>
+    <div class="rule rule--double"></div>
+  </header>
+
+  <main id="main">
+
+    <section class="lede" aria-labelledby="lede-h">
+      <p class="kicker">Dispatch from</p>
+      <h2 class="lede__state" id="stateHeading">—</h2>
+      <p class="lede__sub">
+        <span class="lede__line"><strong id="totalContests">0</strong> contests reporting</span>
+        <span class="dot" aria-hidden="true"></span>
+        <span class="lede__line">Counting in <span id="counting">progress</span></span>
+      </p>
+
+      <form class="controls" id="controls" aria-label="Dispatch controls" autocomplete="off">
+        <label class="control">
+          <span class="control__label">State</span>
+          <select id="state" autocomplete="off"></select>
+        </label>
+        <label class="control control--search">
+          <span class="control__label">Find constituency</span>
+          <div class="search-wrap">
+            <input id="search" type="text" placeholder="Type a name…" autocomplete="off"
+                   role="combobox" aria-expanded="false" aria-controls="searchResults" aria-autocomplete="list" />
+            <div id="searchResults" class="search-results" role="listbox" hidden></div>
+          </div>
+        </label>
+        <button type="button" id="refresh" class="btn btn--ghost">
+          <span class="btn__icon" aria-hidden="true">↻</span> Reload
+        </button>
+        <span class="auto-pill" title="Backend re-scrapes the ECI wire every 5 minutes">
+          <span class="press-dot" aria-hidden="true"></span>
+          <span>Auto wire · every 5 min</span>
+        </span>
+        <span id="status" class="status" role="status" aria-live="polite"></span>
+      </form>
+    </section>
+
+    <section class="hero-figures" aria-label="Headline figures">
+      <article class="figure" style="--i:0">
+        <p class="figure__label">Leading the Field</p>
+        <p class="figure__value" id="topPartyAbbr">—</p>
+        <p class="figure__caption">
+          <span id="topPartyName">—</span><br/>
+          <strong id="topPartySeats">0</strong> seats &middot; <span id="topPartyShare">—</span>
+        </p>
+      </article>
+
+      <article class="figure" style="--i:1">
+        <p class="figure__label">Knife-Edge Margin</p>
+        <p class="figure__value figure__value--num" id="closestMargin">—</p>
+        <p class="figure__caption">
+          <span id="closestRace">—</span><br/>
+          <span class="muted" id="closestPair">—</span>
+        </p>
+      </article>
+
+      <article class="figure" style="--i:2">
+        <p class="figure__label">Last Bulletin</p>
+        <p class="figure__value figure__value--time" id="lastUpdate">—</p>
+        <p class="figure__caption">
+          <strong id="lastPages">0</strong> pages on file<br/>
+          <span class="muted" id="lastRows">0 rows recorded</span>
+        </p>
+      </article>
+    </section>
+
+    <section class="tug" aria-labelledby="tug-h">
+      <header class="section-head">
+        <p class="kicker">Figure I</p>
+        <h3 id="tug-h">The Margin Pyramid</h3>
+        <p class="dek">
+          Each row charts a single party. Bars to the right of the centerline are seats
+          where the party currently <em>leads</em>; bars to the left are seats where it
+          currently <em>trails</em>. Solid blocks denote leading; hatched blocks denote trailing.
+          Colour intensity rises with the size of the margin band — a tight contest is pale,
+          a landslide is deep red. Read the spread to weigh comfort against jeopardy.
+        </p>
+      </header>
+
+      <div id="legend" class="legend" aria-label="Margin band legend"></div>
+
+      <div class="pyramid-frame">
+        <div id="pyramid" class="pyramid"></div>
+        <div class="pyramid__empty" id="pyramidEmpty" hidden>
+          <p>No data on file. <em>First bulletin</em> arriving — auto-scrape in progress.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="detailPanel" class="detail" hidden aria-live="polite" aria-labelledby="detailTitle">
+      <button class="detail__close" id="detailClose" aria-label="Close detail" type="button">×</button>
+      <header class="section-head detail__head">
+        <p class="kicker" id="detailKicker">Detail</p>
+        <h3 id="detailTitle">—</h3>
+        <p class="dek" id="detailDek"></p>
+      </header>
+      <div id="detailBody" class="detail__body"></div>
+    </section>
+
+    <section class="grid-2">
+      <section class="bucket-table" aria-labelledby="bt-h">
+        <header class="section-head section-head--small">
+          <p class="kicker">Table I</p>
+          <h3 id="bt-h">Margin Tally</h3>
+          <p class="dek">Seat counts by party and margin band.</p>
+        </header>
+        <div class="mode-toggle" role="tablist" aria-label="Table mode">
+          <button data-mode="lead" class="active" role="tab" aria-selected="true">Leading</button>
+          <button data-mode="trail" role="tab" aria-selected="false">Trailing</button>
+        </div>
+        <div class="table-wrap">
+          <table id="bucketTable"></table>
+        </div>
+      </section>
+
+      <section class="watchlist" aria-labelledby="wl-h">
+        <header class="section-head section-head--small">
+          <p class="kicker" id="watchKicker">Dispatch</p>
+          <h3 id="wl-h">Knife-Edge Contests</h3>
+          <p class="dek"><span id="watchDek">Eight tightest margins on file.</span> <button class="link-toggle" id="watchToggle">Show landslides instead</button></p>
+        </header>
+        <ol id="closeContests" class="contests"></ol>
+      </section>
+    </section>
+
+  </main>
+
+  <footer class="colophon" role="contentinfo">
+    <div class="rule rule--double"></div>
+    <div class="colophon__inner">
+      <span>Set in Fraunces, Newsreader &amp; IBM Plex Mono</span>
+      <span class="ornament">❦</span>
+      <span>Compiled live from public ECI bulletins</span>
+    </div>
+    <div class="rule rule--hair"></div>
+  </footer>
+
+  <div id="tooltip" class="tooltip" role="tooltip" hidden></div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

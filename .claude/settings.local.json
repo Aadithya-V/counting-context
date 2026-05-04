@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir \"C:\\\\Users\\\\aadit\\\\codebase\\\\election-dashboard\")",
+      "Bash(curl -sI -A \"Mozilla/5.0\" \"https://results.eci.gov.in/\" -w \"\\\\n---\\\\n\")",
+      "Bash(curl -s -A \"Mozilla/5.0\" \"https://results.eci.gov.in/\" -o /tmp/eci_root.html -w \"HTTP %{http_code} size %{size_download}\\\\n\")",
+      "Bash(uv run *)",
+      "Bash(curl -s \"http://127.0.0.1:8765/api/buckets?state=S22\")",
+      "Bash(python -c \"import json, sys; d=json.load\\(sys.stdin\\); print\\('buckets:', d['buckets']\\); print\\('parties with data:'\\); [print\\(' ', p[:40], '|lead:', v['lead_total'], 'trail:', v['trail_total']\\) for p,v in sorted\\(d['parties'].items\\(\\), key=lambda x:-x[1]['lead_total']\\)[:6]]\")",
+      "Bash(kill %1)",
+      "Bash(SCRAPE_ON_STARTUP=0 SCRAPE_INTERVAL_SECONDS=30 uv run *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://127.0.0.1:8765/api/health)",
+      "Bash(curl -s \"http://127.0.0.1:8766/\")",
+      "Bash(kill %2)",
+      "Bash(SCRAPE_ON_STARTUP=0 SCRAPE_INTERVAL_SECONDS=600 uv run *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://127.0.0.1:8768/api/health)",
+      "Bash(python -m json.tool)",
+      "Bash(curl -s \"http://127.0.0.1:8768/\")",
+      "Bash(curl -s \"http://127.0.0.1:8768/api/buckets?state=U07\")",
+      "Bash(python -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('U07 buckets parties:', list\\(d['parties'].keys\\(\\)\\)[:5]\\)\")",
+      "Bash(grep *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://127.0.0.1:8769/api/health)",
+      "Bash(curl -s \"http://127.0.0.1:8769/app.js\")",
+      "mcp__claude_ai_Context7__resolve-library-id",
+      "mcp__claude_ai_Context7__query-docs",
+      "Bash(uv sync *)",
+      "Bash(jobs -l)",
+      "Bash(tasklist //FI \"IMAGENAME eq python.exe\")"
+    ]
+  }
+}

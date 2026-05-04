@@ -1,0 +1,38 @@
+# Fly.io app config — `fly launch` will overwrite the app name.
+# Mumbai (bom) is closest to results.eci.gov.in.
+
+app = "counting-context"
+primary_region = "bom"
+
+[build]
+
+[env]
+  SCRAPE_INTERVAL_SECONDS = "300"
+  # SCRAPE_STATES = "S22,S25,S03,U07"   # uncomment to override states.ENABLED
+  # SCRAPE_ON_STARTUP = "1"
+
+# Persistent volume for data/results.db. Created via:
+#   fly volumes create data --region bom --size 1
+[mounts]
+  source = "data"
+  destination = "/app/data"
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = "off"      # keep the scheduler alive
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ["app"]
+
+  [http_service.concurrency]
+    type = "requests"
+    soft_limit = 50
+    hard_limit = 100
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"
+
+[[restart]]
+  policy = "always"
