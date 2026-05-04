@@ -14,4 +14,10 @@ dist/
 .DS_Store
 Thumbs.db
 
+# SQLite transient files (rollback journal / WAL / shared-memory).
+# results.db itself is committed; these are per-process and meaningless to share.
+*.db-journal
+*.db-wal
+*.db-shm
+
 # Note: data/ is intentionally NOT ignored — results.db is committed.
