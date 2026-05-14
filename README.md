@@ -1,5 +1,7 @@
 # Election Results Dashboard
 
+Video Walkthrough: [https://www.loom.com/share/575a0d548664437b950b295bdd91fa06]
+
 A live election-night dashboard for results from
 [results.eci.gov.in](https://results.eci.gov.in/). Python backend scrapes the
 ECI statewise pages, stores rows in SQLite, and serves a broadsheet-style
